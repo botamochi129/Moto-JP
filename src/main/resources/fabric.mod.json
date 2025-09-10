@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "mtjp",
+  "version": "${version}",
+  "name": "Moto JP",
+  "description": "Created by botamochi129,Model Provided by Tofu.",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/mtjp/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "jp.mtjp.client.MtjpClient"
+    ],
+    "main": [
+      "jp.mtjp.Mtjp"
+    ]
+  },
+  "mixins": [
+    "mtjp.mixins.json",
+    {
+      "config": "mtjp.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
