@@ -1,5 +1,6 @@
 package jp.mtjp.client.util;
 
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.RenderLayer;
@@ -13,21 +14,26 @@ import java.util.*;
 public class ObjModel {
     private final Map<String, Mesh> meshes = new HashMap<>();
 
+    // 頂点群は全メッシュで共有
+    private final List<float[]> vertices = new ArrayList<>();
+    private final List<float[]> texCoords = new ArrayList<>();
+    private final List<float[]> normals = new ArrayList<>();
+
     public ObjModel(Identifier id) {
+        System.out.println("Loading OBJ model from: " + "/assets/" + id.getNamespace() + id.getPath());
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(ObjModel.class.getResourceAsStream(
-                        "/assets/" + id.getNamespace() + "/models/obj/" + id.getPath()))
+                        "/assets/" + id.getNamespace() + id.getPath()))
         ))) {
             Mesh currentMesh = null;
-            List<float[]> vertices = new ArrayList<>();
-            List<float[]> texCoords = new ArrayList<>();
-            List<float[]> normals = new ArrayList<>();
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("o ")) {
+                if (line.startsWith("g ")) {
                     String name = line.substring(2).trim();
-                    currentMesh = new Mesh(name);
+                    System.out.println("New mesh detected: " + name);
+                    // 頂点群は共有するため渡す
+                    currentMesh = new Mesh(name, vertices, texCoords, normals);
                     meshes.put(name, currentMesh);
                 } else if (line.startsWith("v ")) {
                     String[] s = line.split("\\s+");
@@ -51,10 +57,12 @@ public class ObjModel {
                 }
             }
 
+            // デバッグ出力：メッシュ毎の情報
             for (Mesh mesh : meshes.values()) {
-                mesh.vertices.addAll(vertices);
-                mesh.texCoords.addAll(texCoords);
-                mesh.normals.addAll(normals);
+                System.out.println("Mesh " + mesh.name + ": vertices=" + vertices.size() +
+                        ", texCoords=" + texCoords.size() +
+                        ", normals=" + normals.size() +
+                        ", faces=" + mesh.faces.size());
             }
 
         } catch (Exception e) {
@@ -62,24 +70,35 @@ public class ObjModel {
         }
     }
 
-    public void renderPart(String name, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier texture) {
+    public void renderPart(String name, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier texture, int light) {
         Mesh mesh = meshes.get(name);
         if (mesh == null) return;
 
         VertexConsumer vc = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(texture));
 
         for (int[] f : mesh.faces) {
-            float[] v = mesh.vertices.get(f[0]);
-            float[] uv = f[1] >= 0 ? mesh.texCoords.get(f[1]) : new float[]{0, 0};
-            float[] n = f[2] >= 0 ? mesh.normals.get(f[2]) : new float[]{0, 1, 0};
+            int vi = f[0];
+            int vti = f[1];
+            int vni = f[2];
+
+            if (vi < 0 || vi >= vertices.size()) continue;
+            float[] v = vertices.get(vi);
+
+            float[] uv = (vti >= 0 && vti < texCoords.size()) ? texCoords.get(vti) : new float[]{0f, 0f};
+            float[] n = (vni >= 0 && vni < normals.size()) ? normals.get(vni) : new float[]{0f, 1f, 0f};
 
             vc.vertex(matrices.peek().getPositionMatrix(), v[0], v[1], v[2])
                     .color(255, 255, 255, 255)
                     .texture(uv[0], uv[1])
+                    .overlay(OverlayTexture.DEFAULT_UV)  // 追加: デフォルトのオーバーレイUV
+                    .light(light)                       // light を引数で受け取り、そのまま渡す
                     .normal(matrices.peek().getNormalMatrix(), n[0], n[1], n[2])
                     .next();
         }
     }
 
-    public Set<String> getPartNames() { return meshes.keySet(); }
+    public Set<String> getPartNames() {
+        System.out.println("Available parts: " + meshes.keySet());
+        return meshes.keySet();
+    }
 }
