@@ -14,7 +14,7 @@ Pc 0.000000
 Pcr 0.030000
 aniso 0.000000
 anisor 0.000000
-map_Kd rx7.png
+map_Kd entity/rx7.png
 
 newmtl mat1
 Kd 0.300000 0.300000 0.300000
@@ -30,3 +30,4 @@ Pc 0.000000
 Pcr 0.030000
 aniso 0.000000
 anisor 0.000000
+map_Kd entity/rx7.png

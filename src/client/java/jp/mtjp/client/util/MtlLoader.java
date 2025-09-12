@@ -1,13 +1,10 @@
-package jp.mtjp.util;
+package jp.mtjp.client.util;
+
+import net.minecraft.util.Identifier;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
-import net.minecraft.util.Identifier;
+import java.util.*;
 
 public class MtlLoader {
     public static class MtlMaterial {

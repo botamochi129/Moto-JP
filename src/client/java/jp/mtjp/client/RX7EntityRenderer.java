@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 public class RX7EntityRenderer extends EntityRenderer<RX7Entity> {
 
     private static final Identifier DUMMY_TEXTURE = new Identifier("mtjp", "models/obj/rx7.png");
-    private static final ObjModel MODEL = new ObjModel(new Identifier("mtjp", "/models/obj/rx7.obj"));
+    private static final ObjModel MODEL = new ObjModel(new Identifier("mtjp", "/models/obj/rx7.obj"), new Identifier("mtjp", "/models/obj/rx7.mtl"));
 
     public RX7EntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
@@ -27,14 +27,14 @@ public class RX7EntityRenderer extends EntityRenderer<RX7Entity> {
         matrices.scale(3.0f, 3.0f, 3.0f);
 
         // レンダリング
-        MODEL.renderPart("body", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("light_lib", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("doorL", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("doorR", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("FL", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("FR", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("BL", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
-        MODEL.renderPart("BR", matrices, vertexConsumers, DUMMY_TEXTURE, 255);
+        MODEL.renderPart("body", matrices, vertexConsumers, 255);
+        MODEL.renderPart("light_lib", matrices, vertexConsumers, 255);
+        MODEL.renderPart("doorL", matrices, vertexConsumers, 255);
+        MODEL.renderPart("doorR", matrices, vertexConsumers, 255);
+        MODEL.renderPart("FL", matrices, vertexConsumers, 255);
+        MODEL.renderPart("FR", matrices, vertexConsumers, 255);
+        MODEL.renderPart("BL", matrices, vertexConsumers, 255);
+        MODEL.renderPart("BR", matrices, vertexConsumers, 255);
 
         matrices.pop();
     }
