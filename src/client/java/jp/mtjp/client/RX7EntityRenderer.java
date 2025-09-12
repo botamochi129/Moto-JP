@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 public class RX7EntityRenderer extends EntityRenderer<RX7Entity> {
 
     private static final Identifier DUMMY_TEXTURE = new Identifier("mtjp", "models/obj/rx7.png");
-    private static final ObjModel MODEL = new ObjModel(new Identifier("mtjp", "/models/obj/rx7.obj"), new Identifier("mtjp", "/models/obj/rx7.mtl"));
+    private static final ObjModel MODEL = new ObjModel(new Identifier("mtjp", "models/obj/rx7.obj"), new Identifier("mtjp", "models/obj/rx7.mtl"));
 
     public RX7EntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
