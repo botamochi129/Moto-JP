@@ -94,11 +94,13 @@ public class ObjModel {
 
             for (Triangle tri : entry.getValue()) {
                 for (int i = 0; i < 3; i++) {
-                    int vi = tri.vertex[i], vti = tri.texCoord[i], vni = tri.normal[i];
+                    int vi = tri.vertex[i];
+                    int vti = tri.texCoord[i];
+                    int vni = tri.normal[i];
 
                     float[] v = vertices.get(vi);
-                    float[] uv = (vti >= 0 && vti < texCoords.size()) ? texCoords.get(vti) : new float[] { 0f, 0f };
-                    float[] n = (vni >= 0 && vni < normals.size()) ? normals.get(vni) : new float[] { 0f, 1f, 0f };
+                    float[] uv = (vti >= 0 && vti < texCoords.size()) ? texCoords.get(vti) : new float[]{0f, 0f};
+                    float[] n  = (vni >= 0 && vni < normals.size()) ? normals.get(vni) : new float[]{0f, 1f, 0f};
 
                     vc.vertex(matrices.peek().getPositionMatrix(), v[0], v[1], v[2])
                             .color(255, 255, 255, 255)
